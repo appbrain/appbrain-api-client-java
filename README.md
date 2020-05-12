@@ -1,10 +1,6 @@
 # appbrain-api-client
 
-AppBrain API
-- API version: 2.0
-
-API to interact with AppBrain.
-
+A Java client library to interact with the [AppBrain API](https://www.appbrain.com/info/help/api/appbrain-api.html).
 
 ## Requirements
 
@@ -103,45 +99,10 @@ public class ApiClientDemo {
 
 ```
 
-## Documentation for API Endpoints
+## Documentation for AppBrain API
 
-All URIs are relative to *https://api.appbrain.com/v2*
-
-Class | Method | HTTP request | Description
------------- | ------------- | ------------- | -------------
-*InformationApi* | [**browseApps**](docs/InformationApi.md#browseApps) | **GET** /info/browse | Apps information
-*InformationApi* | [**getApp**](docs/InformationApi.md#getApp) | **GET** /info/getapp | App information
-*InformationApi* | [**getCountries**](docs/InformationApi.md#getCountries) | **GET** /info/getcountries | Countries information
-*InformationApi* | [**getLibraries**](docs/InformationApi.md#getLibraries) | **GET** /info/getlibraries | Libraries information
-*InformationApi* | [**searchApps**](docs/InformationApi.md#searchApps) | **GET** /info/search | Apps information
-*PromotionCampaignsApi* | [**get**](docs/PromotionCampaignsApi.md#get) | **GET** /campaigns/get | Retrieves a promotion campaign
-*PromotionCampaignsApi* | [**list**](docs/PromotionCampaignsApi.md#list) | **GET** /campaigns/list | Lists all promotion campaigns
-*PromotionCampaignsApi* | [**update**](docs/PromotionCampaignsApi.md#update) | **POST** /campaigns/update | Creates or updates a promotion campaign
-
-
-## Documentation for Models
-
- - [AppInfo](docs/AppInfo.md)
- - [AppInfoList](docs/AppInfoList.md)
- - [Country](docs/Country.md)
- - [CountryInfo](docs/CountryInfo.md)
- - [CountryList](docs/CountryList.md)
- - [Library](docs/Library.md)
- - [LibraryList](docs/LibraryList.md)
- - [PromotionCampaign](docs/PromotionCampaign.md)
- - [PromotionCampaignList](docs/PromotionCampaignList.md)
- - [PromotionCampaignUpdates](docs/PromotionCampaignUpdates.md)
-
-
-## Documentation for Authorization
-
-Authentication schemes defined for the API:
-### apikey
-
-- **Type**: API key
-- **API key parameter name**: apikey
-- **Location**: URL query string
-
+Please see here:
+https://www.appbrain.com/info/help/api/specification.html
 
 ## Recommendation
 
