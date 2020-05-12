@@ -1,0 +1,142 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'io.swagger:swagger-codegen:2.4.13'
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    withJavadocJar()
+    withSourcesJar()
+}
+
+import io.swagger.codegen.config.CodegenConfigurator
+import io.swagger.codegen.DefaultGenerator
+
+def swaggerInput = 'appbrain-api-spec.json'
+def swaggerOutputDir = file('build/swagger')
+task generateApi {
+    inputs.file(swaggerInput)
+    outputs.dir(swaggerOutputDir)
+    doLast {
+        def config = new CodegenConfigurator()
+        config.setInputSpec(swaggerInput)
+        config.setOutputDir(swaggerOutputDir.path)
+        config.setLang('java')
+        config.setAdditionalProperties([
+                'invokerPackage'         : 'com.appbrain.client',
+                'modelPackage'           : 'com.appbrain.client.model',
+                'apiPackage'             : 'com.appbrain.client.api',
+                'groupId'                : 'com.appbrain',
+                'artifactId'             : 'appbrain-api-client',
+                'dateLibrary'            : 'java8',
+                'hideGenerationTimestamp': true
+        ])
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}
+
+clean.doFirst {
+    delete(swaggerOutputDir)
+}
+
+configurations {
+    swagger
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', "${project.buildDir.path}/swagger/src/main/java"]
+        }
+    }
+}
+
+compileJava.dependsOn generateApi
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.appbrain'
+            artifactId = 'appbrain-api-client'
+            version = '1.0.0'
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'AppBrain API Client'
+                description = 'The AppBrain API is a web service that allows automated interaction with AppBrain.'
+                url = 'https://www.appbrain.com/info/help/api/appbrain-api.html'
+
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'appbrain'
+                        name = 'AppBrain Team'
+                        email = 'contact@appbrain.com'
+                    }
+                }
+                scm {
+                    connection = 'git@github.com:appbrain/appbrain-api-client-java.git'
+                    developerConnection = 'git@github.com:appbrain/appbrain-api-client-java.git'
+                    url = 'https://github.com/appbrain/appbrain-api-client-java'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+dependencies {
+    implementation 'io.swagger:swagger-annotations:1.6.1'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+    implementation 'com.squareup.okhttp:logging-interceptor:2.7.5'
+    implementation 'com.google.code.gson:gson:2.8.1'
+    implementation 'io.gsonfire:gson-fire:1.8.0'
+}
+
+task debug {
+    doLast {
+        project.sourceSets.main.java.srcDirs.forEach {
+            println(it)
+        }
+    }
+}
+
+
