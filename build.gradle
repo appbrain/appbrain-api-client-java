@@ -101,11 +101,13 @@ publishing {
                         id = 'appbrain'
                         name = 'AppBrain Team'
                         email = 'contact@appbrain.com'
+                        organization = "AppBrain"
+                        organizationUrl = "https://www.appbrain.com"
                     }
                 }
                 scm {
-                    connection = 'git@github.com:appbrain/appbrain-api-client-java.git'
-                    developerConnection = 'git@github.com:appbrain/appbrain-api-client-java.git'
+                    connection = 'scm:git:git://github.com/appbrain/appbrain-api-client-java.git'
+                    developerConnection = 'scm:git:ssh://github.com:appbrain/appbrain-api-client-java.git'
                     url = 'https://github.com/appbrain/appbrain-api-client-java'
                 }
             }
