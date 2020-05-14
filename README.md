@@ -1,30 +1,8 @@
-# appbrain-api-client
+# AppBrain API Client library for Java / Kotlin
 
-A Java client library to interact with the [AppBrain API](https://www.appbrain.com/info/help/api/appbrain-api.html).
-
-## Requirements
-
-Building the API client library requires:
-1. Java 1.7+
-2. Maven/Gradle
+The [AppBrain API](https://www.appbrain.com/info/help/api/appbrain-api.html) allows you to programmatically access data about apps on Google Play. Queries for specific apps, search and browse are supported. AppBrain advertisers can manage their campaign.
 
 ## Installation
-
-To install the API client library to your local Maven repository, simply execute:
-
-```shell
-mvn clean install
-```
-
-To deploy it to a remote Maven repository instead, configure the settings of the repository and execute:
-
-```shell
-mvn clean deploy
-```
-
-Refer to the [OSSRH Guide](http://central.sonatype.org/pages/ossrh-guide.html) for more information.
-
-### Maven users
 
 Add this dependency to your project's POM:
 
@@ -50,13 +28,13 @@ implementation "com.appbrain:appbrain-api-client:1.0.0"
 At first generate the JAR by executing:
 
 ```shell
-mvn clean package
+./gradlew build
 ```
 
 Then manually install the following JARs:
 
-* `target/appbrain-api-client-1.0.0.jar`
-* `target/lib/*.jar`
+* `build/libs/appbrain-api-client-1.0.0.jar`
+* Also the required dependency JAR files 
 
 ## Getting Started
 
@@ -109,6 +87,5 @@ https://www.appbrain.com/info/help/api/specification.html
 It's recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issues.
 
 ## Author
-
-contact@appbrain.com
+AppBrain API Team - contact@appbrain.com
 
