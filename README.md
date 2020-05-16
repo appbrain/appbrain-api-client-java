@@ -1,3 +1,5 @@
+![Maven Central](https://img.shields.io/maven-central/v/com.appbrain/appbrain-api-client)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/appbrain/appbrain-api-client-java)
 # AppBrain API Client library for Java / Kotlin
 
 The [AppBrain API](https://www.appbrain.com/info/help/api/appbrain-api.html) allows you to programmatically access data about apps on Google Play. Queries for specific apps, search and browse are supported. AppBrain advertisers can manage their campaign.
