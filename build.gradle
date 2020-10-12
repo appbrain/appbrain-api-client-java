@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'io.swagger:swagger-codegen:2.4.13'
+        classpath 'io.swagger:swagger-codegen:2.4.16'
     }
 }
 
@@ -70,12 +70,15 @@ sourceSets {
 
 compileJava.dependsOn generateApi
 
+version = '1.0-SNAPSHOT'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
 publishing {
     publications {
         appbrainApiClient(MavenPublication) {
             groupId = 'com.appbrain'
             artifactId = 'appbrain-api-client'
-            version = '1.0.1-SNAPSHOT'
+            version = version
             from components.java
             versionMapping {
                 usage('java-api') {
@@ -120,14 +123,15 @@ publishing {
             url = publishing.publications.appbrainApiClient.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : stagingRepoUrl
 
             credentials {
-                username sonatypeUsername
-                password sonatypePassword
+                username  project.hasProperty('sonatypeUsername') ? project.property('sonatypeUsername') : ''
+                password project.hasProperty('sonatypePassword') ? project.property('sonatypePassword') : ''
             }
         }
    }
 }
 
 signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
     sign publishing.publications.appbrainApiClient
 }
 
@@ -136,6 +140,10 @@ javadoc {
         options.addBooleanOption('html5', true)
     }
 }
+
+// the recommended gradle plugin to publish artifacts is maven-publish
+// however jitpack expects a task "install" which is provided by the older "maven" plugin
+task install(dependsOn: 'publishToMavenLocal')
 
 dependencies {
     implementation 'io.swagger:swagger-annotations:1.6.1'
