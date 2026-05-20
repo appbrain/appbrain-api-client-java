@@ -1,22 +1,12 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        classpath 'io.swagger:swagger-codegen:2.4.16'
-    }
-}
-
 plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
+    id 'org.openapi.generator' version '7.14.0'
 }
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 java {
@@ -26,49 +16,44 @@ java {
     withSourcesJar()
 }
 
-import io.swagger.codegen.config.CodegenConfigurator
-import io.swagger.codegen.DefaultGenerator
-
-def swaggerInput = 'appbrain-api-spec.json'
-def swaggerOutputDir = file('build/swagger')
-task generateApi {
-    inputs.file(swaggerInput)
-    outputs.dir(swaggerOutputDir)
-    doLast {
-        def config = new CodegenConfigurator()
-        config.setInputSpec(swaggerInput)
-        config.setOutputDir(swaggerOutputDir.path)
-        config.setLang('java')
-        config.setAdditionalProperties([
-                'invokerPackage'         : 'com.appbrain.client',
-                'modelPackage'           : 'com.appbrain.client.model',
-                'apiPackage'             : 'com.appbrain.client.api',
-                'groupId'                : 'com.appbrain',
-                'artifactId'             : 'appbrain-api-client',
-                'dateLibrary'            : 'java8',
-                'hideGenerationTimestamp': true
-        ])
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
-    }
+// Java 8 is kept as the compatibility baseline (broad consumer + Android support);
+// silence javac's "source/target 8 is obsolete" notice on newer JDKs.
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-Xlint:-options'
 }
 
-clean.doFirst {
-    delete(swaggerOutputDir)
-}
-
-configurations {
-    swagger
+openApiGenerate {
+    generatorName = 'java'
+    library = 'okhttp-gson'
+    inputSpec = "$projectDir/appbrain-api-spec.json"
+    outputDir = layout.buildDirectory.dir('swagger').get().asFile.toString()
+    invokerPackage = 'com.appbrain.client'
+    apiPackage = 'com.appbrain.client.api'
+    modelPackage = 'com.appbrain.client.model'
+    configOptions = [
+            dateLibrary            : 'java8',
+            hideGenerationTimestamp: 'true'
+    ]
+    generateApiTests = false
+    generateModelTests = false
+    generateApiDocumentation = false
+    generateModelDocumentation = false
 }
 
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main/java', "${project.buildDir.path}/swagger/src/main/java"]
+            srcDir 'src/main/java'
+            srcDir files(layout.buildDirectory.dir('swagger/src/main/java')).builtBy(tasks.openApiGenerate)
         }
     }
 }
 
-compileJava.dependsOn generateApi
+compileJava.dependsOn tasks.openApiGenerate
+
+test {
+    useJUnitPlatform()
+}
 
 version = '1.0.2-SNAPSHOT'
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
@@ -123,19 +108,23 @@ publishing {
             url = publishing.publications.appbrainApiClient.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : stagingRepoUrl
 
             credentials {
-                username  project.hasProperty('sonatypeUsername') ? project.property('sonatypeUsername') : ''
-                password project.hasProperty('sonatypePassword') ? project.property('sonatypePassword') : ''
+                username = project.hasProperty('sonatypeUsername') ? project.property('sonatypeUsername') : ''
+                password = project.hasProperty('sonatypePassword') ? project.property('sonatypePassword') : ''
             }
         }
    }
 }
 
 signing {
-    required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+    required = { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
     sign publishing.publications.appbrainApiClient
 }
 
 javadoc {
+    // The generated API classes use a custom @http.response.details tag and HTML
+    // tables; register the tag and relax doclint so javadoc does not fail on them.
+    options.tags = ['http.response.details:a:Response Details:']
+    options.addStringOption('Xdoclint:none', '-quiet')
     if(JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
     }
@@ -146,11 +135,18 @@ javadoc {
 task install(dependsOn: 'publishToMavenLocal')
 
 dependencies {
-    implementation 'io.swagger:swagger-annotations:1.6.1'
-    implementation 'com.squareup.okhttp:okhttp:2.7.5'
-    implementation 'com.squareup.okhttp:logging-interceptor:2.7.5'
-    implementation 'com.google.code.gson:gson:2.8.1'
-    implementation 'io.gsonfire:gson-fire:1.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
+    implementation 'com.google.code.gson:gson:2.14.0'
+    implementation 'io.gsonfire:gson-fire:1.9.0'
+    // jsr305 supplies the @Nonnull/@Nullable used on generated fields (runtime
+    // retention). @javax.annotation.Generated comes from javax.annotation-api and
+    // is source-retention, so it is only needed at compile time.
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.12.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.12.2'
 }
 
 
