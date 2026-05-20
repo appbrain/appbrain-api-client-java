@@ -2,7 +2,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/appbrain/appbrain-api-client-java)
 # AppBrain API Client library for Java / Kotlin
 
-The [AppBrain API](https://www.appbrain.com/info/help/api/appbrain-api.html) allows you to programmatically access data about apps on Google Play. Queries for specific apps, search and browse are supported. AppBrain advertisers can manage their campaign.
+The [AppBrain API](https://www.appbrain.com/docs/api/appbrain-api) allows you to programmatically access data about apps on Google Play. Queries for specific apps, search and browse are supported. AppBrain advertisers can manage their campaign.
 
 ## Installation
 
@@ -58,7 +58,7 @@ public class ApiClientDemo {
         ApiClient apiClient = Configuration.getDefaultApiClient();
 
         // Get the API key from https://developers.appbrain.com/dev_dashboard#DevPagePlace:page=api
-        // for more information see: https://developers.appbrain.com/info/help/api/appbrain-api.html
+        // for more information see: https://www.appbrain.com/docs/api/appbrain-api
         apiClient.setApiKey("<APIKEY>");
 
         InformationApi api = new InformationApi(apiClient);
@@ -82,7 +82,7 @@ public class ApiClientDemo {
 ## Documentation for AppBrain API
 
 Please see here:
-https://www.appbrain.com/info/help/api/specification.html
+https://www.appbrain.com/docs/api/specification
 
 ## Recommendation
 
