@@ -1,1019 +1,1339 @@
 {
- "basePath": "/v2",
- "paths": {
-  "/info/getapp": {"get": {
-   "summary": "App information",
-   "security": [{"apikey": []}],
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Returns all information about an app. More information about usage and charges is available at <a href='/info/help/api/pricing.html'>AppBrain API pricing<\/a>.",
-   "operationId": "getApp",
-   "responses": {
-    "200": {
-     "schema": {"$ref": "#/definitions/AppInfo"},
-     "description": "successful operation"
+  "basePath": "/v2",
+  "definitions": {
+    "AppInfo": {
+      "description": "Everything about an app",
+      "properties": {
+        "apkSize": {
+          "description": "size of the APK",
+          "format": "int64",
+          "type": "integer"
+        },
+        "commentCount": {
+          "description": "number of comments",
+          "format": "int32",
+          "type": "integer"
+        },
+        "description": {
+          "description": "description of the app",
+          "type": "string"
+        },
+        "developerAddress": {
+          "description": "address of the developer",
+          "type": "string"
+        },
+        "developerEmail": {
+          "description": "email address of the developer",
+          "type": "string"
+        },
+        "developerName": {
+          "description": "name of the developer of the app",
+          "type": "string"
+        },
+        "downloadsCategory": {
+          "description": "Google play category of the number of downloads",
+          "type": "string"
+        },
+        "estimatedDownloads": {
+          "description": "estimated number of downloads",
+          "format": "int64",
+          "type": "integer"
+        },
+        "estimatedRecentDownloads": {
+          "description": "estimated number of downloads in the last 30 days",
+          "format": "int64",
+          "type": "integer"
+        },
+        "featureGraphicUrl": {
+          "description": "URL of the app's feature graphic",
+          "type": "string"
+        },
+        "iconUrl": {
+          "description": "URL of the app's icon",
+          "type": "string"
+        },
+        "infoRefreshTime": {
+          "description": "timestamp of the last refresh of the app information in seconds since epoch",
+          "format": "int32",
+          "type": "integer"
+        },
+        "lastAppUpdateTime": {
+          "description": "timestamp of the app's latest update in seconds since epoch",
+          "format": "int32",
+          "type": "integer"
+        },
+        "launchTime": {
+          "description": "timestamp of the app's launch in seconds since epoch",
+          "format": "int32",
+          "type": "integer"
+        },
+        "libraries": {
+          "description": "libraries used in the app",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "library"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "marketCategory": {
+          "description": "market category of the app",
+          "type": "string"
+        },
+        "maturityLevel": {
+          "description": "maturity level of the app",
+          "enum": [
+            "EVERYONE",
+            "LOW",
+            "MEDIUM",
+            "HIGH"
+          ],
+          "type": "string"
+        },
+        "maxSdkVersion": {
+          "description": "maximum supported SDK version",
+          "format": "int32",
+          "type": "integer"
+        },
+        "minSdkVersion": {
+          "description": "minimum supported SDK version",
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "description": "name of the app",
+          "type": "string"
+        },
+        "package": {
+          "description": "package",
+          "type": "string"
+        },
+        "permissions": {
+          "description": "requested permissions",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "permission"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "plusOneCount": {
+          "description": "number of +1s",
+          "format": "int32",
+          "type": "integer"
+        },
+        "price": {
+          "description": "price of the app",
+          "type": "string"
+        },
+        "rating": {
+          "description": "average rating",
+          "format": "double",
+          "type": "number"
+        },
+        "rating1StarCount": {
+          "description": "number of 1-star ratings",
+          "format": "int32",
+          "type": "integer"
+        },
+        "rating2StarCount": {
+          "description": "number of 2-star ratings",
+          "format": "int32",
+          "type": "integer"
+        },
+        "rating3StarCount": {
+          "description": "number of 3-star ratings",
+          "format": "int32",
+          "type": "integer"
+        },
+        "rating4StarCount": {
+          "description": "number of 4-star ratings",
+          "format": "int32",
+          "type": "integer"
+        },
+        "rating5StarCount": {
+          "description": "number of 5-star ratings",
+          "format": "int32",
+          "type": "integer"
+        },
+        "ratingCount": {
+          "description": "number of ratings",
+          "format": "int32",
+          "type": "integer"
+        },
+        "recentRating": {
+          "description": "average rating (deprecated, present for historic reasons)",
+          "format": "double",
+          "type": "number"
+        },
+        "screenshotUrls": {
+          "description": "URLs of the app's screenshots",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "screenshotUrl"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "shortDescription": {
+          "description": "short one-line description of the app",
+          "type": "string"
+        },
+        "supportsApp2SD": {
+          "description": "whether the app can be installed on external storage",
+          "enum": [
+            "TRUE",
+            "FALSE"
+          ],
+          "type": "string"
+        },
+        "versionCode": {
+          "description": "most recent version code",
+          "format": "int32",
+          "type": "integer"
+        },
+        "versionString": {
+          "description": "most recent version",
+          "type": "string"
+        },
+        "website": {
+          "description": "official website of the app",
+          "type": "string"
+        },
+        "youtubeUrl": {
+          "description": "YouTube URL of the app's promo video",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
-    "400": {"description": "Invalid request"},
-    "401": {"description": "Unauthorized request"},
-    "429": {"description": "Too many requests"}
-   },
-   "parameters": [{
-    "in": "query",
-    "name": "package",
-    "description": "package",
-    "type": "string",
-    "required": true
-   }],
-   "tags": ["Information"]
-  }},
-  "/info/getcountries": {"get": {
-   "summary": "Countries information",
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Returns a list of countries.",
-   "operationId": "getCountries",
-   "responses": {"200": {
-    "schema": {"$ref": "#/definitions/CountryList"},
-    "description": "successful operation"
-   }},
-   "parameters": [],
-   "tags": ["Information"]
-  }},
-  "/info/search": {"get": {
-   "summary": "Apps information",
-   "security": [{"apikey": []}],
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Returns a list of apps and everything about those apps. More information about usage and charges is available at <a href='/info/help/api/pricing.html'>AppBrain API pricing<\/a>.",
-   "operationId": "searchApps",
-   "responses": {
-    "200": {
-     "schema": {"$ref": "#/definitions/AppInfoList"},
-     "description": "successful operation"
+    "AppInfoList": {
+      "description": "List of apps",
+      "properties": {
+        "apps": {
+          "description": "List of apps",
+          "items": {
+            "$ref": "#/definitions/AppInfo",
+            "xml": {
+              "name": "app"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        }
+      },
+      "type": "object"
     },
-    "400": {"description": "Invalid request"},
-    "401": {"description": "Unauthorized request"},
-    "429": {"description": "Too many requests"}
-   },
-   "parameters": [
-    {
-     "in": "query",
-     "name": "query",
-     "description": "search query",
-     "type": "string",
-     "required": false
+    "Country": {
+      "description": "Settings for a country in the promotion campaign",
+      "properties": {
+        "code": {
+          "description": "the two-letter ISO country code",
+          "type": "string"
+        },
+        "cpi": {
+          "description": "the maximum cost-per-install for a country in dollars",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
     },
-    {
-     "in": "query",
-     "name": "sort",
-     "description": "sort order of the results (default: RELEVANCY)",
-     "type": "string",
-     "required": false,
-     "enum": [
-      "ALLTIME_DOWNLOADS",
-      "HOT-DAY",
-      "POPULAR_AUSTRALIA",
-      "POPULAR_BRAZIL",
-      "POPULAR_CANADA",
-      "POPULAR_DENMARK",
-      "POPULAR_FINLAND",
-      "POPULAR_FRANCE",
-      "POPULAR_GERMANY",
-      "POPULAR_HONGKONG",
-      "POPULAR_HUNGARY",
-      "POPULAR_INDIA",
-      "POPULAR_ITALY",
-      "POPULAR_JAPAN",
-      "POPULAR_KOREA",
-      "POPULAR_NETHERLANDS",
-      "POPULAR_NORWAY",
-      "POPULAR_POLAND",
-      "POPULAR_PORTUGAL",
-      "POPULAR_RUSSIA",
-      "POPULAR_SPAIN",
-      "POPULAR_SWEDEN",
-      "POPULAR_THAILAND",
-      "POPULAR_UK",
-      "POPULAR_USA",
-      "RATING",
-      "RECENT_DOWNLOADS",
-      "RELEVANCY",
-      "TIME"
-     ]
+    "CountryInfo": {
+      "description": "Information about a country",
+      "properties": {
+        "code": {
+          "description": "country code",
+          "type": "string"
+        },
+        "minCpiBid": {
+          "description": "minimum cost-per-install bid for app promotions in this country",
+          "format": "double",
+          "type": "number"
+        },
+        "name": {
+          "description": "name of the country",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
-    {
-     "in": "query",
-     "name": "filter",
-     "description": "optional filter of the results",
-     "type": "string",
-     "required": false,
-     "enum": [
-      "FREE",
-      "NEW",
-      "PAID",
-      "PRICE_REDUCED",
-      "UPDATED"
-     ]
+    "CountryList": {
+      "description": "List of countries",
+      "properties": {
+        "countries": {
+          "description": "country information",
+          "items": {
+            "$ref": "#/definitions/CountryInfo",
+            "xml": {
+              "name": "country"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        }
+      },
+      "type": "object"
     },
-    {
-     "in": "query",
-     "name": "category",
-     "description": "optional filter for the Google Play category",
-     "type": "string",
-     "required": false,
-     "enum": [
-      "ACTION",
-      "ADVENTURE",
-      "ARCADE",
-      "ART_DESIGN",
-      "AUTO",
-      "BEAUTY",
-      "BOARD",
-      "BOOKS_REFERENCE",
-      "BUSINESS",
-      "CARD",
-      "CASINO",
-      "CASUAL",
-      "COMICS",
-      "COMMUNICATION",
-      "DATING",
-      "EDUCATION",
-      "EDUCATIONAL",
-      "ENTERTAINMENT",
-      "EVENTS",
-      "FINANCE",
-      "FOOD_DRINK",
-      "HEALTH_FITNESS",
-      "HOUSE_HOME",
-      "LIBRARIES_DEMO",
-      "LIFESTYLE",
-      "MEDIA_VIDEO",
-      "MEDICAL",
-      "MUSIC",
-      "MUSIC_AUDIO",
-      "NEWS_MAGAZINES",
-      "PARENTING",
-      "PERSONALIZATION",
-      "PHOTOGRAPHY",
-      "PRODUCTIVITY",
-      "PUZZLE",
-      "RACING",
-      "ROLE_PLAYING",
-      "SHOPPING",
-      "SIMULATION",
-      "SOCIAL",
-      "SPORTS",
-      "SPORTS_GAMES",
-      "STRATEGY",
-      "TOOLS",
-      "TRANSPORTATION",
-      "TRAVEL_LOCAL",
-      "TRIVIA",
-      "WEATHER",
-      "WORD"
-     ]
+    "DeviceInfo": {
+      "description": "Information about a device",
+      "properties": {
+        "absolutePopularity": {
+          "description": "absolute popularity (market share in country)",
+          "format": "double",
+          "type": "number"
+        },
+        "deviceName": {
+          "description": "device name",
+          "type": "string"
+        },
+        "manufacturerName": {
+          "description": "manufacturer",
+          "type": "string"
+        },
+        "modelName": {
+          "description": "model name",
+          "type": "string"
+        },
+        "name": {
+          "description": "name of the device",
+          "type": "string"
+        },
+        "rank": {
+          "description": "rank",
+          "format": "int32",
+          "type": "integer"
+        },
+        "relativePopularity": {
+          "description": "relative popularity (the share of the global market of a phone or tablet for this country)",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
     },
-    {
-     "in": "query",
-     "name": "offset",
-     "format": "int32",
-     "description": "offset of the browse results (default 0; max 500)",
-     "type": "integer",
-     "required": false
+    "DeviceList": {
+      "description": "List of devices",
+      "properties": {
+        "devices": {
+          "description": "Device information",
+          "items": {
+            "$ref": "#/definitions/DeviceInfo",
+            "xml": {
+              "name": "device"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        }
+      },
+      "type": "object"
     },
-    {
-     "in": "query",
-     "name": "limit",
-     "format": "int32",
-     "description": "number of the browse results (default 10; max 50)",
-     "type": "integer",
-     "required": false
+    "Library": {
+      "description": "Information about a library",
+      "properties": {
+        "appBrainUrl": {
+          "description": "AppBrain URL of the library",
+          "type": "string"
+        },
+        "description": {
+          "description": "description of the library",
+          "type": "string"
+        },
+        "id": {
+          "description": "identifier for the library",
+          "type": "string"
+        },
+        "name": {
+          "description": "name of the library",
+          "type": "string"
+        },
+        "officialUrl": {
+          "description": "official URL of the library",
+          "type": "string"
+        },
+        "tags": {
+          "description": "tags associated with the library",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "types": {
+          "description": "types of the library",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "LibraryList": {
+      "description": "List of known libraries",
+      "properties": {
+        "libraries": {
+          "description": "library information",
+          "items": {
+            "$ref": "#/definitions/Library",
+            "xml": {
+              "name": "library"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        }
+      },
+      "type": "object"
+    },
+    "PromotionCampaign": {
+      "description": "All details of a promotion campaign",
+      "properties": {
+        "allowedSubIds": {
+          "description": "list of publisher subIDs to allow for this campaign",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "allowedSubId"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "blockedSubIds": {
+          "description": "list of publisher subIDs to block for this campaign",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "blockedSubId"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "campaign": {
+          "description": "identifier of the promotion campaign",
+          "type": "string"
+        },
+        "clickthroughUrl": {
+          "description": "clickthrough URL of the promotion campaign",
+          "type": "string"
+        },
+        "countries": {
+          "description": "list of settings for each country where the campaign is running",
+          "items": {
+            "$ref": "#/definitions/Country",
+            "xml": {
+              "name": "country"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "dailyBudget": {
+          "description": "daily budget of the promotion campaign in dollars",
+          "format": "double",
+          "type": "number"
+        },
+        "installTracking": {
+          "description": "attribution partner that is used for install tracking",
+          "enum": [
+            "APPBRAIN",
+            "ADJUST",
+            "APPSFLYER",
+            "SINGULAR",
+            "KOCHAVA",
+            "TUNE",
+            "BRANCH"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "description": "name/description of the promotion campaign",
+          "type": "string"
+        },
+        "remainingBudget": {
+          "description": "total remaining budget the promotion campaign in dollars",
+          "format": "double",
+          "type": "number"
+        },
+        "state": {
+          "description": "state of the promotion campaign",
+          "type": "string"
+        },
+        "subtitle": {
+          "description": "promotion subtitle of the promotion campaign",
+          "type": "string"
+        },
+        "title": {
+          "description": "promotion title of the promotion campaign",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PromotionCampaignList": {
+      "description": "List of promotion campaigns",
+      "properties": {
+        "campaigns": {
+          "description": "identifiers of existing promotion campaigns",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "campaign"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        }
+      },
+      "type": "object"
+    },
+    "PromotionCampaignUpdates": {
+      "description": "Updates for a promotion campaign",
+      "properties": {
+        "addAllowedSubIds": {
+          "description": "adds publisher subIDs to the list of allowed subIDs (can't be used simultaneously with allowedSubIds)",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "addAllowedSubId"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "addBlockedSubIds": {
+          "description": "adds publisher subIDs to the list of blocked subIDs (can't be used simultaneously with blockedSubIds)",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "addBlockedSubId"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "allowedSubIds": {
+          "description": "list of publisher subIDs to allow for this campaign; setting this list overwrites all existing allowed subIDs (can't be used simultaneously with addAllowedSubIds)",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "allowedSubId"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "blockedSubIds": {
+          "description": "list of publisher subIDs to block for this campaign; setting this list overwrites all existing blocked subIDs (can't be used simultaneously with addBlockedSubIds)",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "blockedSubId"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "campaign": {
+          "description": "identifier of the promotion campaign (i.e. the package of the promoted app, eventually followed by a dash and an index for multiple campaigns per app.)",
+          "type": "string"
+        },
+        "clickthroughUrl": {
+          "description": "clickthrough URL of the promotion campaign",
+          "type": "string"
+        },
+        "countries": {
+          "description": "list of settings for each country where the campaign is running; setting this list overwrites all country settings for the promotion campaign (can't be used simultaneously with updateCountries or removeCountries)",
+          "items": {
+            "$ref": "#/definitions/Country",
+            "xml": {
+              "name": "country"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "dailyBudget": {
+          "description": "daily budget of the promotion campaign in dollars (a negative value indicates no budget limit)",
+          "format": "double",
+          "type": "number"
+        },
+        "installTracking": {
+          "description": "attribution partner that is used for install tracking",
+          "enum": [
+            "APPBRAIN",
+            "ADJUST",
+            "APPSFLYER",
+            "SINGULAR",
+            "KOCHAVA",
+            "TUNE",
+            "BRANCH"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "description": "name/description of the promotion campaign",
+          "type": "string"
+        },
+        "remainingBudget": {
+          "description": "total remaining budget the promotion campaign in dollars (a negative value indicates no budget limit)",
+          "format": "double",
+          "type": "number"
+        },
+        "removeCountries": {
+          "description": "removes the provided countries from the promotion campaign (can't be used simultaneously with countries)",
+          "items": {
+            "type": "string",
+            "xml": {
+              "name": "removeCountry"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        },
+        "state": {
+          "description": "state of the promotion campaign",
+          "enum": [
+            "RUNNING",
+            "STOPPED"
+          ],
+          "type": "string"
+        },
+        "subtitle": {
+          "description": "promotion subtitle of the promotion campaign",
+          "type": "string"
+        },
+        "title": {
+          "description": "promotion title of the promotion campaign",
+          "type": "string"
+        },
+        "updateCountries": {
+          "description": "updates the provided settings for the countries (can't be used simultaneously with countries)",
+          "items": {
+            "$ref": "#/definitions/Country",
+            "xml": {
+              "name": "updateCountry"
+            }
+          },
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          }
+        }
+      },
+      "required": [
+        "campaign"
+      ],
+      "type": "object"
     }
-   ],
-   "tags": ["Information"]
-  }},
-  "/info/getlibraries": {"get": {
-   "summary": "Libraries information",
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Returns a list of known libraries used in apps.",
-   "operationId": "getLibraries",
-   "responses": {"200": {
-    "schema": {"$ref": "#/definitions/LibraryList"},
-    "description": "successful operation"
-   }},
-   "parameters": [],
-   "tags": ["Information"]
-  }},
-  "/info/browse": {"get": {
-   "summary": "Apps information",
-   "security": [{"apikey": []}],
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Returns a list of apps and everything about those apps. More information about usage and charges is available at <a href='/info/help/api/pricing.html'>AppBrain API pricing<\/a>.",
-   "operationId": "browseApps",
-   "responses": {
-    "200": {
-     "schema": {"$ref": "#/definitions/AppInfoList"},
-     "description": "successful operation"
-    },
-    "400": {"description": "Invalid request"},
-    "401": {"description": "Unauthorized request"},
-    "429": {"description": "Too many requests"}
-   },
-   "parameters": [
-    {
-     "in": "query",
-     "name": "sort",
-     "description": "sort order of the results (default: POPULAR)",
-     "type": "string",
-     "required": false,
-     "enum": [
-      "ALLTIME_DOWNLOADS",
-      "HOT-DAY",
-      "POPULAR_AUSTRALIA",
-      "POPULAR_BRAZIL",
-      "POPULAR_CANADA",
-      "POPULAR_DENMARK",
-      "POPULAR_FINLAND",
-      "POPULAR_FRANCE",
-      "POPULAR_GERMANY",
-      "POPULAR_HONGKONG",
-      "POPULAR_HUNGARY",
-      "POPULAR_INDIA",
-      "POPULAR_ITALY",
-      "POPULAR_JAPAN",
-      "POPULAR_KOREA",
-      "POPULAR_NETHERLANDS",
-      "POPULAR_NORWAY",
-      "POPULAR_POLAND",
-      "POPULAR_PORTUGAL",
-      "POPULAR_RUSSIA",
-      "POPULAR_SPAIN",
-      "POPULAR_SWEDEN",
-      "POPULAR_THAILAND",
-      "POPULAR_UK",
-      "POPULAR_USA",
-      "RATING",
-      "RECENT_DOWNLOADS",
-      "TIME"
-     ]
-    },
-    {
-     "in": "query",
-     "name": "filter",
-     "description": "optional filter of the results",
-     "type": "string",
-     "required": false,
-     "enum": [
-      "FREE",
-      "NEW",
-      "PAID",
-      "PRICE_REDUCED",
-      "UPDATED"
-     ]
-    },
-    {
-     "in": "query",
-     "name": "category",
-     "description": "optional filter for the Google Play category",
-     "type": "string",
-     "required": false,
-     "enum": [
-      "ACTION",
-      "ADVENTURE",
-      "ARCADE",
-      "ART_DESIGN",
-      "AUTO",
-      "BEAUTY",
-      "BOARD",
-      "BOOKS_REFERENCE",
-      "BUSINESS",
-      "CARD",
-      "CASINO",
-      "CASUAL",
-      "COMICS",
-      "COMMUNICATION",
-      "DATING",
-      "EDUCATION",
-      "EDUCATIONAL",
-      "ENTERTAINMENT",
-      "EVENTS",
-      "FINANCE",
-      "FOOD_DRINK",
-      "HEALTH_FITNESS",
-      "HOUSE_HOME",
-      "LIBRARIES_DEMO",
-      "LIFESTYLE",
-      "MEDIA_VIDEO",
-      "MEDICAL",
-      "MUSIC",
-      "MUSIC_AUDIO",
-      "NEWS_MAGAZINES",
-      "PARENTING",
-      "PERSONALIZATION",
-      "PHOTOGRAPHY",
-      "PRODUCTIVITY",
-      "PUZZLE",
-      "RACING",
-      "ROLE_PLAYING",
-      "SHOPPING",
-      "SIMULATION",
-      "SOCIAL",
-      "SPORTS",
-      "SPORTS_GAMES",
-      "STRATEGY",
-      "TOOLS",
-      "TRANSPORTATION",
-      "TRAVEL_LOCAL",
-      "TRIVIA",
-      "WEATHER",
-      "WORD"
-     ]
-    },
-    {
-     "in": "query",
-     "name": "offset",
-     "format": "int32",
-     "description": "offset of the browse results (default 0; max 500)",
-     "type": "integer",
-     "required": false
-    },
-    {
-     "in": "query",
-     "name": "limit",
-     "format": "int32",
-     "description": "number of the browse results (default 10; max 50)",
-     "type": "integer",
-     "required": false
-    }
-   ],
-   "tags": ["Information"]
-  }},
-  "/campaigns/get": {"get": {
-   "summary": "Retrieves a promotion campaign",
-   "security": [{"apikey": []}],
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Retrieves the details of a promotion campaign.",
-   "operationId": "get",
-   "responses": {
-    "200": {
-     "schema": {"$ref": "#/definitions/PromotionCampaign"},
-     "description": "successful operation"
-    },
-    "400": {"description": "Invalid request"},
-    "401": {"description": "Unauthorized request"},
-    "429": {"description": "Too many requests"}
-   },
-   "parameters": [{
-    "in": "query",
-    "name": "campaign",
-    "description": "campaign",
-    "type": "string",
-    "required": true
-   }],
-   "tags": ["Promotion Campaigns"]
-  }},
-  "/campaigns/update": {"post": {
-   "summary": "Creates or updates a promotion campaign",
-   "security": [{"apikey": []}],
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Creates a new promotion campaign or updates an existing one.",
-   "operationId": "update",
-   "responses": {
-    "200": {
-     "schema": {"type": "string"},
-     "description": "successful operation"
-    },
-    "400": {"description": "Invalid request"},
-    "401": {"description": "Unauthorized request"},
-    "429": {"description": "Too many requests"}
-   },
-   "parameters": [
-    {
-     "schema": {"$ref": "#/definitions/PromotionCampaignUpdates"},
-     "in": "body",
-     "name": "body",
-     "description": "the properties of the campaign that must be updated",
-     "required": true
-    },
-    {
-     "in": "query",
-     "name": "lowbidaction",
-     "description": "what to do if a country bid is lower than the minimum allowed bid (ERROR: throw an error, RAISE: raise the country bid, STOP: stop campaign in the country)",
-     "type": "string",
-     "required": false,
-     "enum": [
-      "ERROR",
-      "RAISE",
-      "STOP"
-     ]
-    }
-   ],
-   "tags": ["Promotion Campaigns"],
-   "consumes": [
-    "application/json",
-    "application/xml"
-   ]
-  }},
-  "/campaigns/list": {"get": {
-   "summary": "Lists all promotion campaigns",
-   "security": [{"apikey": []}],
-   "produces": [
-    "application/json",
-    "application/xml"
-   ],
-   "description": "Returns a list of identifiers of all promotion campaigns.",
-   "operationId": "list",
-   "responses": {
-    "200": {
-     "schema": {"$ref": "#/definitions/PromotionCampaignList"},
-     "description": "successful operation"
-    },
-    "400": {"description": "Invalid request"},
-    "401": {"description": "Unauthorized request"},
-    "429": {"description": "Too many requests"}
-   },
-   "parameters": [{
-    "default": true,
-    "in": "query",
-    "name": "includeArchived",
-    "description": "include archived campaigns",
-    "type": "boolean",
-    "required": false
-   }],
-   "tags": ["Promotion Campaigns"]
-  }}
- },
- "host": "api.appbrain.com",
- "schemes": ["https"],
- "externalDocs": {
-  "description": "AppBrain API Documentation",
-  "url": "https://www.appbrain.com/info/help/api/specification.html"
- },
- "securityDefinitions": {"apikey": {
-  "in": "query",
-  "name": "apikey",
-  "description": "The API key for AppBrain API",
-  "type": "apiKey"
- }},
- "definitions": {
-  "PromotionCampaignList": {
-   "description": "List of promotion campaigns",
-   "type": "object",
-   "properties": {"campaigns": {
-    "xml": {"wrapped": true},
-    "description": "identifiers of existing promotion campaigns",
-    "type": "array",
-    "items": {
-     "xml": {"name": "campaign"},
-     "type": "string"
-    }
-   }}
   },
-  "PromotionCampaignUpdates": {
-   "description": "Updates for a promotion campaign",
-   "type": "object",
-   "required": ["campaign"],
-   "properties": {
-    "allowedSubIds": {
-     "xml": {"wrapped": true},
-     "description": "list of publisher subIDs to allow for this campaign; setting this list overwrites all existing allowed subIDs (can't be used simultaneously with addAllowedSubIds)",
-     "type": "array",
-     "items": {
-      "xml": {"name": "allowedSubId"},
-      "type": "string"
-     }
-    },
-    "addAllowedSubIds": {
-     "xml": {"wrapped": true},
-     "description": "adds publisher subIDs to the list of allowed subIDs (can't be used simultaneously with allowedSubIds)",
-     "type": "array",
-     "items": {
-      "xml": {"name": "addAllowedSubId"},
-      "type": "string"
-     }
-    },
-    "remainingBudget": {
-     "format": "double",
-     "description": "total remaining budget the promotion campaign in dollars (a negative value indicates no budget limit)",
-     "type": "number"
-    },
-    "addBlockedSubIds": {
-     "xml": {"wrapped": true},
-     "description": "adds publisher subIDs to the list of blocked subIDs (can't be used simultaneously with blockedSubIds)",
-     "type": "array",
-     "items": {
-      "xml": {"name": "addBlockedSubId"},
-      "type": "string"
-     }
-    },
-    "countries": {
-     "xml": {"wrapped": true},
-     "description": "list of settings for each country where the campaign is running; setting this list overwrites all country settings for the promotion campaign (can't be used simultaneously with updateCountries or removeCountries)",
-     "type": "array",
-     "items": {
-      "xml": {"name": "country"},
-      "$ref": "#/definitions/Country"
-     }
-    },
-    "title": {
-     "description": "promotion title of the promotion campaign",
-     "type": "string"
-    },
-    "removeCountries": {
-     "xml": {"wrapped": true},
-     "description": "removes the provided countries from the promotion campaign (can't be used simultaneously with countries)",
-     "type": "array",
-     "items": {
-      "xml": {"name": "removeCountry"},
-      "type": "string"
-     }
-    },
-    "installTracking": {
-     "description": "attribution partner that is used for install tracking",
-     "type": "string",
-     "enum": [
-      "APPBRAIN",
-      "ADJUST",
-      "APPSFLYER",
-      "SINGULAR",
-      "KOCHAVA",
-      "TUNE"
-     ]
-    },
-    "blockedSubIds": {
-     "xml": {"wrapped": true},
-     "description": "list of publisher subIDs to block for this campaign; setting this list overwrites all existing blocked subIDs (can't be used simultaneously with addBlockedSubIds)",
-     "type": "array",
-     "items": {
-      "xml": {"name": "blockedSubId"},
-      "type": "string"
-     }
-    },
-    "clickthroughUrl": {
-     "description": "clickthrough URL of the promotion campaign",
-     "type": "string"
-    },
-    "updateCountries": {
-     "xml": {"wrapped": true},
-     "description": "updates the provided settings for the countries (can't be used simultaneously with countries)",
-     "type": "array",
-     "items": {
-      "xml": {"name": "updateCountry"},
-      "$ref": "#/definitions/Country"
-     }
-    },
-    "dailyBudget": {
-     "format": "double",
-     "description": "daily budget of the promotion campaign in dollars (a negative value indicates no budget limit)",
-     "type": "number"
-    },
-    "subtitle": {
-     "description": "promotion subtitle of the promotion campaign",
-     "type": "string"
-    },
-    "name": {
-     "description": "name/description of the promotion campaign",
-     "type": "string"
-    },
-    "campaign": {
-     "description": "identifier of the promotion campaign (i.e. the package of the promoted app, eventually followed by a dash and an index for multiple campaigns per app.)",
-     "type": "string"
-    },
-    "state": {
-     "description": "state of the promotion campaign",
-     "type": "string",
-     "enum": [
-      "RUNNING",
-      "STOPPED"
-     ]
-    }
-   }
+  "externalDocs": {
+    "description": "AppBrain API Documentation",
+    "url": "https://www.appbrain.com/info/help/api/specification.html"
   },
-  "CountryInfo": {
-   "description": "Information about a country",
-   "type": "object",
-   "properties": {
-    "code": {
-     "description": "country code",
-     "type": "string"
+  "host": "api.appbrain.com",
+  "info": {
+    "contact": {
+      "email": "contact@appbrain.com",
+      "name": "AppBrain Support"
     },
-    "name": {
-     "description": "name of the country",
-     "type": "string"
-    },
-    "minCpiBid": {
-     "format": "double",
-     "description": "minimum cost-per-install bid for app promotions in this country",
-     "type": "number"
-    }
-   }
+    "description": "API to interact with AppBrain.",
+    "title": "AppBrain API",
+    "version": "2.0"
   },
-  "LibraryList": {
-   "description": "List of known libraries",
-   "type": "object",
-   "properties": {"libraries": {
-    "xml": {"wrapped": true},
-    "description": "library information",
-    "type": "array",
-    "items": {
-     "xml": {"name": "library"},
-     "$ref": "#/definitions/Library"
+  "paths": {
+    "/campaigns/get": {
+      "get": {
+        "description": "Retrieves the details of a promotion campaign.",
+        "operationId": "get",
+        "parameters": [
+          {
+            "description": "campaign",
+            "in": "query",
+            "name": "campaign",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/PromotionCampaign"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "summary": "Retrieves a promotion campaign",
+        "tags": [
+          "Promotion Campaigns"
+        ]
+      }
+    },
+    "/campaigns/list": {
+      "get": {
+        "description": "Returns a list of identifiers of all promotion campaigns.",
+        "operationId": "list",
+        "parameters": [
+          {
+            "default": true,
+            "description": "include archived campaigns",
+            "in": "query",
+            "name": "includeArchived",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/PromotionCampaignList"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "summary": "Lists all promotion campaigns",
+        "tags": [
+          "Promotion Campaigns"
+        ]
+      }
+    },
+    "/campaigns/update": {
+      "post": {
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "description": "Creates a new promotion campaign or updates an existing one.",
+        "operationId": "update",
+        "parameters": [
+          {
+            "description": "the properties of the campaign that must be updated",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PromotionCampaignUpdates"
+            }
+          },
+          {
+            "description": "what to do if a country bid is lower than the minimum allowed bid (ERROR: throw an error, RAISE: raise the country bid, STOP: stop campaign in the country)",
+            "enum": [
+              "ERROR",
+              "RAISE",
+              "STOP"
+            ],
+            "in": "query",
+            "name": "lowbidaction",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "summary": "Creates or updates a promotion campaign",
+        "tags": [
+          "Promotion Campaigns"
+        ]
+      }
+    },
+    "/device_stats/top_by_country": {
+      "get": {
+        "description": "Returns the most used devices in a country. The API credential needs to be from an account that has a valid intelligence subscription.",
+        "operationId": "getTopDevicesByCountry",
+        "parameters": [
+          {
+            "description": "2-letter country code",
+            "in": "query",
+            "name": "country",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/DeviceList"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "summary": "Top devices by country",
+        "tags": [
+          "Devices"
+        ]
+      }
+    },
+    "/info/browse": {
+      "get": {
+        "description": "Returns a list of apps and everything about those apps. More information about usage and charges is available at <a href='/info/help/api/pricing.html'>AppBrain API pricing</a>.",
+        "operationId": "browseApps",
+        "parameters": [
+          {
+            "description": "sort order of the results (default: POPULAR)",
+            "enum": [
+              "ALLTIME_DOWNLOADS",
+              "HOT-DAY",
+              "POPULAR_AUSTRALIA",
+              "POPULAR_BRAZIL",
+              "POPULAR_CANADA",
+              "POPULAR_DENMARK",
+              "POPULAR_FINLAND",
+              "POPULAR_FRANCE",
+              "POPULAR_GERMANY",
+              "POPULAR_HONGKONG",
+              "POPULAR_HUNGARY",
+              "POPULAR_INDIA",
+              "POPULAR_ITALY",
+              "POPULAR_JAPAN",
+              "POPULAR_KOREA",
+              "POPULAR_NETHERLANDS",
+              "POPULAR_NORWAY",
+              "POPULAR_POLAND",
+              "POPULAR_PORTUGAL",
+              "POPULAR_RUSSIA",
+              "POPULAR_SPAIN",
+              "POPULAR_SWEDEN",
+              "POPULAR_THAILAND",
+              "POPULAR_UK",
+              "POPULAR_USA",
+              "RATING",
+              "RECENT_DOWNLOADS",
+              "TIME"
+            ],
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "optional filter of the results",
+            "enum": [
+              "FREE",
+              "NEW",
+              "PAID",
+              "PRICE_REDUCED",
+              "UPDATED"
+            ],
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "optional filter for the Google Play category",
+            "enum": [
+              "APPLICATION",
+              "GAME",
+              "ACTION",
+              "ADVENTURE",
+              "ARCADE",
+              "ART_DESIGN",
+              "AUTO",
+              "BEAUTY",
+              "BOARD",
+              "BOOKS_REFERENCE",
+              "BUSINESS",
+              "CARD",
+              "CASINO",
+              "CASUAL",
+              "COMICS",
+              "COMMUNICATION",
+              "DATING",
+              "EDUCATION",
+              "EDUCATIONAL",
+              "ENTERTAINMENT",
+              "EVENTS",
+              "FINANCE",
+              "FOOD_DRINK",
+              "HEALTH_FITNESS",
+              "HOUSE_HOME",
+              "LIBRARIES_DEMO",
+              "LIFESTYLE",
+              "MEDIA_VIDEO",
+              "MEDICAL",
+              "MUSIC",
+              "MUSIC_AUDIO",
+              "NEWS_MAGAZINES",
+              "PARENTING",
+              "PERSONALIZATION",
+              "PHOTOGRAPHY",
+              "PRODUCTIVITY",
+              "PUZZLE",
+              "RACING",
+              "ROLE_PLAYING",
+              "SHOPPING",
+              "SIMULATION",
+              "SOCIAL",
+              "SPORTS",
+              "SPORTS_GAMES",
+              "STRATEGY",
+              "TOOLS",
+              "TRANSPORTATION",
+              "TRAVEL_LOCAL",
+              "TRIVIA",
+              "WEATHER",
+              "WORD"
+            ],
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "offset of the browse results (default 0; max 500)",
+            "format": "int32",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "number of the browse results (default 10; max 50)",
+            "format": "int32",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AppInfoList"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "summary": "Apps information",
+        "tags": [
+          "Information"
+        ]
+      }
+    },
+    "/info/getapp": {
+      "get": {
+        "description": "Returns all information about an app. More information about usage and charges is available at <a href='/info/help/api/pricing.html'>AppBrain API pricing</a>.",
+        "operationId": "getApp",
+        "parameters": [
+          {
+            "description": "package",
+            "in": "query",
+            "name": "package",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AppInfo"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "summary": "App information",
+        "tags": [
+          "Information"
+        ]
+      }
+    },
+    "/info/getcountries": {
+      "get": {
+        "description": "Returns a list of countries.",
+        "operationId": "getCountries",
+        "parameters": [],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/CountryList"
+            }
+          }
+        },
+        "summary": "Countries information",
+        "tags": [
+          "Information"
+        ]
+      }
+    },
+    "/info/getlibraries": {
+      "get": {
+        "description": "Returns a list of known libraries used in apps.",
+        "operationId": "getLibraries",
+        "parameters": [],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/LibraryList"
+            }
+          }
+        },
+        "summary": "Libraries information",
+        "tags": [
+          "Information"
+        ]
+      }
+    },
+    "/info/search": {
+      "get": {
+        "description": "Returns a list of apps and everything about those apps. More information about usage and charges is available at <a href='/info/help/api/pricing.html'>AppBrain API pricing</a>.",
+        "operationId": "searchApps",
+        "parameters": [
+          {
+            "description": "search query",
+            "in": "query",
+            "name": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "sort order of the results (default: RELEVANCY)",
+            "enum": [
+              "ALLTIME_DOWNLOADS",
+              "HOT-DAY",
+              "POPULAR_AUSTRALIA",
+              "POPULAR_BRAZIL",
+              "POPULAR_CANADA",
+              "POPULAR_DENMARK",
+              "POPULAR_FINLAND",
+              "POPULAR_FRANCE",
+              "POPULAR_GERMANY",
+              "POPULAR_HONGKONG",
+              "POPULAR_HUNGARY",
+              "POPULAR_INDIA",
+              "POPULAR_ITALY",
+              "POPULAR_JAPAN",
+              "POPULAR_KOREA",
+              "POPULAR_NETHERLANDS",
+              "POPULAR_NORWAY",
+              "POPULAR_POLAND",
+              "POPULAR_PORTUGAL",
+              "POPULAR_RUSSIA",
+              "POPULAR_SPAIN",
+              "POPULAR_SWEDEN",
+              "POPULAR_THAILAND",
+              "POPULAR_UK",
+              "POPULAR_USA",
+              "RATING",
+              "RECENT_DOWNLOADS",
+              "RELEVANCY",
+              "TIME"
+            ],
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "optional filter of the results",
+            "enum": [
+              "FREE",
+              "NEW",
+              "PAID",
+              "PRICE_REDUCED",
+              "UPDATED"
+            ],
+            "in": "query",
+            "name": "filter",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "optional filter for the Google Play category",
+            "enum": [
+              "APPLICATION",
+              "GAME",
+              "ACTION",
+              "ADVENTURE",
+              "ARCADE",
+              "ART_DESIGN",
+              "AUTO",
+              "BEAUTY",
+              "BOARD",
+              "BOOKS_REFERENCE",
+              "BUSINESS",
+              "CARD",
+              "CASINO",
+              "CASUAL",
+              "COMICS",
+              "COMMUNICATION",
+              "DATING",
+              "EDUCATION",
+              "EDUCATIONAL",
+              "ENTERTAINMENT",
+              "EVENTS",
+              "FINANCE",
+              "FOOD_DRINK",
+              "HEALTH_FITNESS",
+              "HOUSE_HOME",
+              "LIBRARIES_DEMO",
+              "LIFESTYLE",
+              "MEDIA_VIDEO",
+              "MEDICAL",
+              "MUSIC",
+              "MUSIC_AUDIO",
+              "NEWS_MAGAZINES",
+              "PARENTING",
+              "PERSONALIZATION",
+              "PHOTOGRAPHY",
+              "PRODUCTIVITY",
+              "PUZZLE",
+              "RACING",
+              "ROLE_PLAYING",
+              "SHOPPING",
+              "SIMULATION",
+              "SOCIAL",
+              "SPORTS",
+              "SPORTS_GAMES",
+              "STRATEGY",
+              "TOOLS",
+              "TRANSPORTATION",
+              "TRAVEL_LOCAL",
+              "TRIVIA",
+              "WEATHER",
+              "WORD"
+            ],
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "description": "offset of the browse results (default 0; max 500)",
+            "format": "int32",
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "description": "number of the browse results (default 10; max 50)",
+            "format": "int32",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/AppInfoList"
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "429": {
+            "description": "Too many requests"
+          }
+        },
+        "security": [
+          {
+            "apikey": []
+          }
+        ],
+        "summary": "Apps information",
+        "tags": [
+          "Information"
+        ]
+      }
     }
-   }}
   },
-  "CountryList": {
-   "description": "List of countries",
-   "type": "object",
-   "properties": {"countries": {
-    "xml": {"wrapped": true},
-    "description": "country information",
-    "type": "array",
-    "items": {
-     "xml": {"name": "country"},
-     "$ref": "#/definitions/CountryInfo"
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "apikey": {
+      "description": "The API key for AppBrain API",
+      "in": "query",
+      "name": "apikey",
+      "type": "apiKey"
     }
-   }}
   },
-  "PromotionCampaign": {
-   "description": "All details of a promotion campaign",
-   "type": "object",
-   "properties": {
-    "allowedSubIds": {
-     "xml": {"wrapped": true},
-     "description": "list of publisher subIDs to allow for this campaign",
-     "type": "array",
-     "items": {
-      "xml": {"name": "allowedSubId"},
-      "type": "string"
-     }
+  "swagger": "2.0",
+  "tags": [
+    {
+      "name": "Information"
     },
-    "clickthroughUrl": {
-     "description": "clickthrough URL of the promotion campaign",
-     "type": "string"
+    {
+      "name": "Devices"
     },
-    "remainingBudget": {
-     "format": "double",
-     "description": "total remaining budget the promotion campaign in dollars",
-     "type": "number"
-    },
-    "dailyBudget": {
-     "format": "double",
-     "description": "daily budget of the promotion campaign in dollars",
-     "type": "number"
-    },
-    "subtitle": {
-     "description": "promotion subtitle of the promotion campaign",
-     "type": "string"
-    },
-    "name": {
-     "description": "name/description of the promotion campaign",
-     "type": "string"
-    },
-    "campaign": {
-     "description": "identifier of the promotion campaign",
-     "type": "string"
-    },
-    "state": {
-     "description": "state of the promotion campaign",
-     "type": "string"
-    },
-    "countries": {
-     "xml": {"wrapped": true},
-     "description": "list of settings for each country where the campaign is running",
-     "type": "array",
-     "items": {
-      "xml": {"name": "country"},
-      "$ref": "#/definitions/Country"
-     }
-    },
-    "title": {
-     "description": "promotion title of the promotion campaign",
-     "type": "string"
-    },
-    "installTracking": {
-     "description": "attribution partner that is used for install tracking",
-     "type": "string",
-     "enum": [
-      "APPBRAIN",
-      "ADJUST",
-      "APPSFLYER",
-      "SINGULAR",
-      "KOCHAVA",
-      "TUNE"
-     ]
-    },
-    "blockedSubIds": {
-     "xml": {"wrapped": true},
-     "description": "list of publisher subIDs to block for this campaign",
-     "type": "array",
-     "items": {
-      "xml": {"name": "blockedSubId"},
-      "type": "string"
-     }
+    {
+      "name": "Promotion Campaigns"
     }
-   }
-  },
-  "AppInfoList": {
-   "description": "List of apps",
-   "type": "object",
-   "properties": {"apps": {
-    "xml": {"wrapped": true},
-    "description": "List of apps",
-    "type": "array",
-    "items": {
-     "xml": {"name": "app"},
-     "$ref": "#/definitions/AppInfo"
-    }
-   }}
-  },
-  "Country": {
-   "description": "Settings for a country in the promotion campaign",
-   "type": "object",
-   "properties": {
-    "code": {
-     "description": "the two-letter ISO country code",
-     "type": "string"
-    },
-    "cpi": {
-     "format": "double",
-     "description": "the maximum cost-per-install for a country in dollars",
-     "type": "number"
-    }
-   }
-  },
-  "Library": {
-   "description": "Information about a library",
-   "type": "object",
-   "properties": {
-    "types": {
-     "description": "types of the library",
-     "type": "array",
-     "items": {"type": "string"}
-    },
-    "appBrainUrl": {
-     "description": "AppBrain URL of the library",
-     "type": "string"
-    },
-    "name": {
-     "description": "name of the library",
-     "type": "string"
-    },
-    "description": {
-     "description": "description of the library",
-     "type": "string"
-    },
-    "id": {
-     "description": "identifier for the library",
-     "type": "string"
-    },
-    "tags": {
-     "description": "tags associated with the library",
-     "type": "array",
-     "items": {"type": "string"}
-    },
-    "officialUrl": {
-     "description": "official URL of the library",
-     "type": "string"
-    }
-   }
-  },
-  "AppInfo": {
-   "description": "Everything about an app",
-   "type": "object",
-   "properties": {
-    "developerAddress": {
-     "description": "address of the developer",
-     "type": "string"
-    },
-    "rating5StarCount": {
-     "format": "int32",
-     "description": "number of 5-star ratings",
-     "type": "integer"
-    },
-    "screenshotUrls": {
-     "xml": {"wrapped": true},
-     "description": "URLs of the app's screenshots",
-     "type": "array",
-     "items": {
-      "xml": {"name": "screenshotUrl"},
-      "type": "string"
-     }
-    },
-    "marketCategory": {
-     "description": "market category of the app",
-     "type": "string"
-    },
-    "infoRefreshTime": {
-     "format": "int32",
-     "description": "timestamp of the last refresh of the app information in seconds since epoch",
-     "type": "integer"
-    },
-    "rating": {
-     "format": "double",
-     "description": "average rating",
-     "type": "number"
-    },
-    "description": {
-     "description": "description of the app",
-     "type": "string"
-    },
-    "developerEmail": {
-     "description": "email address of the developer",
-     "type": "string"
-    },
-    "rating2StarCount": {
-     "format": "int32",
-     "description": "number of 2-star ratings",
-     "type": "integer"
-    },
-    "recentRating": {
-     "format": "double",
-     "description": "average rating in the last 30 days",
-     "type": "number"
-    },
-    "price": {
-     "description": "price of the app",
-     "type": "string"
-    },
-    "youtubeUrl": {
-     "description": "YouTube URL of the app's promo video",
-     "type": "string"
-    },
-    "permissions": {
-     "xml": {"wrapped": true},
-     "description": "requested permissions",
-     "type": "array",
-     "items": {
-      "xml": {"name": "permission"},
-      "type": "string"
-     }
-    },
-    "rating1StarCount": {
-     "format": "int32",
-     "description": "number of 1-star ratings",
-     "type": "integer"
-    },
-    "featureGraphicUrl": {
-     "description": "URL of the app's feature graphic",
-     "type": "string"
-    },
-    "apkSize": {
-     "format": "int64",
-     "description": "size of the APK",
-     "type": "integer"
-    },
-    "iconUrl": {
-     "description": "URL of the app's icon",
-     "type": "string"
-    },
-    "rating4StarCount": {
-     "format": "int32",
-     "description": "number of 4-star ratings",
-     "type": "integer"
-    },
-    "developerName": {
-     "description": "name of the developer of the app",
-     "type": "string"
-    },
-    "maxSdkVersion": {
-     "format": "int32",
-     "description": "maximum supported SDK version",
-     "type": "integer"
-    },
-    "website": {
-     "description": "official website of the app",
-     "type": "string"
-    },
-    "package": {
-     "description": "package",
-     "type": "string"
-    },
-    "versionString": {
-     "description": "most recent version",
-     "type": "string"
-    },
-    "estimatedRecentDownloads": {
-     "format": "int64",
-     "description": "estimated number of downloads in the last 30 days",
-     "type": "integer"
-    },
-    "libraries": {
-     "xml": {"wrapped": true},
-     "description": "libraries used in the app",
-     "type": "array",
-     "items": {
-      "xml": {"name": "library"},
-      "type": "string"
-     }
-    },
-    "plusOneCount": {
-     "format": "int32",
-     "description": "number of +1s",
-     "type": "integer"
-    },
-    "shortDescription": {
-     "description": "short one-line description of the app",
-     "type": "string"
-    },
-    "downloadsCategory": {
-     "description": "Google play category of the number of downloads",
-     "type": "string"
-    },
-    "ratingCount": {
-     "format": "int32",
-     "description": "number of ratings",
-     "type": "integer"
-    },
-    "estimatedDownloads": {
-     "format": "int64",
-     "description": "estimated number of downloads",
-     "type": "integer"
-    },
-    "versionCode": {
-     "format": "int32",
-     "description": "most recent version code",
-     "type": "integer"
-    },
-    "commentCount": {
-     "format": "int32",
-     "description": "number of comments",
-     "type": "integer"
-    },
-    "minSdkVersion": {
-     "format": "int32",
-     "description": "minimum supported SDK version",
-     "type": "integer"
-    },
-    "launchTime": {
-     "format": "int32",
-     "description": "timestamp of the app's launch in seconds since epoch",
-     "type": "integer"
-    },
-    "rating3StarCount": {
-     "format": "int32",
-     "description": "number of 3-star ratings",
-     "type": "integer"
-    },
-    "name": {
-     "description": "name of the app",
-     "type": "string"
-    },
-    "maturityLevel": {
-     "description": "maturity level of the app",
-     "type": "string",
-     "enum": [
-      "EVERYONE",
-      "LOW",
-      "MEDIUM",
-      "HIGH"
-     ]
-    },
-    "lastAppUpdateTime": {
-     "format": "int32",
-     "description": "timestamp of the app's latest update in seconds since epoch",
-     "type": "integer"
-    },
-    "supportsApp2SD": {
-     "description": "whether the app can be installed on external storage",
-     "type": "string",
-     "enum": [
-      "TRUE",
-      "FALSE"
-     ]
-    }
-   }
-  }
- },
- "swagger": "2.0",
- "info": {
-  "contact": {
-   "name": "AppBrain Support",
-   "email": "contact@appbrain.com"
-  },
-  "description": "API to interact with AppBrain.",
-  "title": "AppBrain API",
-  "version": "2.0"
- },
- "tags": [
-  {"name": "Information"},
-  {"name": "Promotion Campaigns"}
- ]
+  ]
 }
