@@ -12,7 +12,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>com.appbrain</groupId>
   <artifactId>appbrain-api-client</artifactId>
-  <version>1.0.0</version>
+  <version>1.2.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -22,21 +22,8 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-implementation "com.appbrain:appbrain-api-client:1.0.0"
+implementation "com.appbrain:appbrain-api-client:1.2.0"
 ```
-
-### Others
-
-At first generate the JAR by executing:
-
-```shell
-./gradlew build
-```
-
-Then manually install the following JARs:
-
-* `build/libs/appbrain-api-client-1.0.0.jar`
-* Also the required dependency JAR files 
 
 ## Getting Started
 
