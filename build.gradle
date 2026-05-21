@@ -1,7 +1,6 @@
 plugins {
     id 'java-library'
-    id 'maven-publish'
-    id 'signing'
+    id 'com.vanniktech.maven.publish' version '0.36.0'
     id 'org.openapi.generator' version '7.14.0'
 }
 
@@ -12,8 +11,9 @@ repositories {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-    withJavadocJar()
-    withSourcesJar()
+    // Sources and Javadoc jars are added automatically by the
+    // com.vanniktech.maven.publish plugin; do not also call
+    // withSourcesJar()/withJavadocJar() here or artifacts get registered twice.
 }
 
 // Java 8 is kept as the compatibility baseline (broad consumer + Android support);
@@ -55,69 +55,48 @@ test {
     useJUnitPlatform()
 }
 
-version = '1.0.2-SNAPSHOT'
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+version = '1.2.1-SNAPSHOT'
 
-publishing {
-    publications {
-        appbrainApiClient(MavenPublication) {
-            groupId = 'com.appbrain'
-            artifactId = 'appbrain-api-client'
-            version = version
-            from components.java
-            versionMapping {
-                usage('java-api') {
-                    fromResolutionOf('runtimeClasspath')
-                }
-                usage('java-runtime') {
-                    fromResolutionResult()
-                }
-            }
-            pom {
-                name = 'AppBrain API Client'
-                description = 'The AppBrain API is a web service that allows automated interaction with AppBrain.'
-                url = 'https://www.appbrain.com/info/help/api/appbrain-api.html'
+// Publishing goes through the Sonatype Central Publisher Portal
+// (central.sonatype.com). The legacy oss.sonatype.org OSSRH service was shut
+// down on 2025-06-30. Credentials and the GPG signing key are read from
+// Gradle properties / environment variables (see RELEASING.md), never committed.
+mavenPublishing {
+    // Upload to Central Portal; `true` also triggers the release automatically
+    // once validation passes (drop the argument to release manually in the UI).
+    publishToMavenCentral(true)
+    // Signs releases with the configured GPG key; snapshots are left unsigned.
+    signAllPublications()
 
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'appbrain'
-                        name = 'AppBrain Team'
-                        email = 'contact@appbrain.com'
-                        organization = "AppBrain"
-                        organizationUrl = "https://www.appbrain.com"
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com/appbrain/appbrain-api-client-java.git'
-                    developerConnection = 'scm:git:ssh://github.com:appbrain/appbrain-api-client-java.git'
-                    url = 'https://github.com/appbrain/appbrain-api-client-java'
-                }
+    coordinates('com.appbrain', 'appbrain-api-client', version.toString())
+
+    pom {
+        name = 'AppBrain API Client'
+        description = 'The AppBrain API is a web service that allows automated interaction with AppBrain.'
+        url = 'https://www.appbrain.com/info/help/api/appbrain-api.html'
+
+        licenses {
+            license {
+                name = 'The Apache License, Version 2.0'
+                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
             }
+        }
+        developers {
+            developer {
+                id = 'appbrain'
+                name = 'AppBrain Team'
+                email = 'contact@appbrain.com'
+                organization = 'AppBrain'
+                organizationUrl = 'https://www.appbrain.com'
+            }
+        }
+        scm {
+            connection = 'scm:git:git://github.com/appbrain/appbrain-api-client-java.git'
+            developerConnection = 'scm:git:ssh://github.com:appbrain/appbrain-api-client-java.git'
+            url = 'https://github.com/appbrain/appbrain-api-client-java'
         }
     }
-    repositories {
-        maven {
-            def stagingRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-            url = publishing.publications.appbrainApiClient.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : stagingRepoUrl
-
-            credentials {
-                username = project.hasProperty('sonatypeUsername') ? project.property('sonatypeUsername') : ''
-                password = project.hasProperty('sonatypePassword') ? project.property('sonatypePassword') : ''
-            }
-        }
-   }
-}
-
-signing {
-    required = { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
-    sign publishing.publications.appbrainApiClient
 }
 
 javadoc {
